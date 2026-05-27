@@ -1,0 +1,24 @@
+# IDE and OS Files
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Root build artifacts
+target/
+*.log
+
+# Environment variables (Critical Security)
+.env
+.env.local
+.env.*.local
+
+# Note: The backend and frontend directories have their own specific .gitignore files 
+# for node_modules, maven targets, etc. This file just protects the root monorepo.
+
+# Node modules
+node_modules/
+
+# React build
+dist/
