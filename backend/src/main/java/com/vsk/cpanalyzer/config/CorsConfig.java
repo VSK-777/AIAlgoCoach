@@ -26,11 +26,8 @@ public class CorsConfig {
         // FRONTEND URLS
         config.setAllowedOrigins(
                 List.of(
-                        "http://127.0.0.1:5501",
-                        "http://localhost:5501",
                         "http://localhost:5173",
-                        frontendUrl,
-                        "https://aialgocoach-frontend.onrender.com"
+                        frontendUrl
                 )
         );
 

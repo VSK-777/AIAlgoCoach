@@ -5,11 +5,11 @@ The backend architecture is built to be robust, secure, and highly scalable. It 
 ## 🛠️ Core Technologies
 
 - **Spring Boot 3.5.x:** The core framework.
-- **Java 25:** Utilizing modern features like Virtual Threads and Records.
+- **Java 21:** Utilizing modern features and LTS stability.
 - **Spring Security 6:** Implementing a stateless, filter-chain-based security architecture.
 - **JWT (JSON Web Tokens):** Secure session management with short-lived access tokens and long-lived refresh tokens.
 - **Spring AI:** Abstraction layer used to seamlessly communicate with Groq's blazing-fast inference endpoints for Llama 3.
-- **Spring Data JPA:** Hibernate-backed ORM for secure MySQL transactions.
+- **Spring Data JPA:** Hibernate-backed ORM for secure PostgreSQL transactions via Neon.
 
 ## 📁 Architectural Layout
 
@@ -19,7 +19,7 @@ src/main/java/com/vsk/cpanalyzer/
 ├── controller/     # RESTful boundaries (Auth, Analytics, AI)
 ├── dto/            # Immutable Data Transfer Objects for Codeforces API mapping
 ├── integration/    # RestTemplate wrappers for external services
-├── model/          # JPA Entities mapping to MySQL tables
+├── model/          # JPA Entities mapping to PostgreSQL tables
 ├── repository/     # JpaRepository interfaces
 ├── security/       # JWT Generation, Validation, and Authentication Filters
 └── service/        # Core business logic
@@ -42,4 +42,4 @@ This service acts as the bridge between the Analytics Engine and the LLM.
 
 - **Stateless Authentication:** No session state is held on the server. All requests must carry a valid `Authorization: Bearer <token>` header.
 - **Password Protection:** Passwords are never stored in plaintext; they are salted and hashed using `BCryptPasswordEncoder`.
-- **CORS Protection:** Cross-Origin Resource Sharing is strictly limited to allowed frontend domains in `ApplicationConfig.java`.
+- **CORS Protection:** Cross-Origin Resource Sharing is strictly limited to the configured frontend domain via the `FRONTEND_URL` environment variable.

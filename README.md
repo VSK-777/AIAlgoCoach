@@ -6,6 +6,10 @@
   <img src="https://img.shields.io/badge/React-19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React"/>
   <img src="https://img.shields.io/badge/Vite-8-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite"/>
   <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/>
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel"/>
+  <img src="https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Render"/>
 </div>
 
 <br />
@@ -56,21 +60,22 @@ Built as a strong student developer portfolio project to demonstrate professiona
 
 ---
 
-## 🏗️ Architecture (Monolithic Full-Stack)
+## 🏗️ Architecture (Decoupled Full-Stack)
 
-AIAlgoCoach uses a highly efficient **Monolithic Deployment Architecture**. While the frontend and backend are developed in separate directories, they are bundled together during the Docker build process so the Spring Boot backend securely serves the React frontend from a single container.
+AIAlgoCoach uses a **Decoupled Deployment Architecture**. The React frontend is independently deployed on **Vercel**, while the Spring Boot backend runs as a Dockerized service on **Render**, connected to a managed **Neon PostgreSQL** database.
 
 ```mermaid
 graph LR
-    A[React/Vite Frontend] <-->|Bundled inside| B(Spring Boot Backend)
+    A[React/Vite on Vercel] <-->|REST + JWT| B(Spring Boot on Render)
     B <-->|Aggregates Data| C[Codeforces Public API]
     B <-->|Mentorship Prompts| D[Groq AI / Llama 3]
-    B <-->|Persists Users| E[(PostgreSQL Database)]
+    B <-->|Persists Users| E[(Neon PostgreSQL)]
 ```
 
 ### Components
-1. **[Backend API](./backend/README.md):** Java 21 & Spring Boot. Powers the data aggregation engine, Security (JWT/BCrypt), and Spring AI integrations.
-2. **[Frontend SPA](./frontend/README.md):** React & Vite. Features a premium glassmorphism aesthetic, responsive Tailwind layouts, and Recharts data visualizations.
+1. **[Backend API](./backend/README.md):** Java 21 & Spring Boot, Dockerized and deployed on Render. Powers the data aggregation engine, Security (JWT/BCrypt), and Spring AI integrations.
+2. **[Frontend SPA](./frontend/README.md):** React & Vite, deployed on Vercel. Features a premium glassmorphism aesthetic, responsive Tailwind layouts, and Recharts data visualizations.
+3. **Database:** Neon PostgreSQL (serverless, managed).
 
 ---
 
@@ -90,4 +95,4 @@ If you are a developer looking to build, test, or deploy this application, pleas
 Passionate about developing futuristic AI assistants, scalable software systems, and modern full-stack applications using professional software engineering principles. Focused on building scalable AI-powered full-stack applications and futuristic intelligent systems.
 
 - **Current Focus:** Full Stack Java Development, AI Engineering, Spring Boot Microservices, React Development, and Intelligent AI Systems.
-- **Skills:** Java, Spring Boot, React, REST APIs, MySQL, JWT Authentication, Microservices, AI Integration, LangChain4j, Gemini API, Groq API, and Data Structures & Algorithms.
+- **Skills:** Java, Spring Boot, React, REST APIs, PostgreSQL, JWT Authentication, Docker, AI Integration, Groq API, Vercel, Render, and Data Structures & Algorithms.

@@ -22,3 +22,5 @@ node_modules/
 
 # React build
 dist/
+# Large media files
+*.mp4
