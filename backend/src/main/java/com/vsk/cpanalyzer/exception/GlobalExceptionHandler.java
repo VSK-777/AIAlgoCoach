@@ -46,6 +46,63 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(jakarta.validation.ConstraintViolationException.class)
+    public ResponseEntity<ApiResponseDTO<Object>> handleConstraintViolationException(
+            jakarta.validation.ConstraintViolationException ex
+    ) {
+        Map<String, java.util.List<String>> errors = new HashMap<>();
+        ex.getConstraintViolations().forEach(violation -> {
+            String field = "";
+            for (jakarta.validation.Path.Node node : violation.getPropertyPath()) {
+                field = node.getName();
+            }
+            errors.computeIfAbsent(field, k -> new java.util.ArrayList<>()).add(violation.getMessage());
+        });
+
+        ApiResponseDTO<Object> response = new ApiResponseDTO<>(
+                false,
+                "Validation failed",
+                errors
+        );
+
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponseDTO<Object>> handleDataIntegrityViolationException(
+            org.springframework.dao.DataIntegrityViolationException ex
+    ) {
+        Map<String, java.util.List<String>> errors = new HashMap<>();
+        String message = ex.getMostSpecificCause().getMessage();
+        
+        if (message != null) {
+            if (message.contains("users_username_key") || message.contains("duplicate key value") && message.contains("username")) {
+                errors.computeIfAbsent("username", k -> new java.util.ArrayList<>()).add("Username is already taken.");
+            }
+            if (message.contains("users_codeforceshandle_key") || message.contains("duplicate key value") && message.contains("codeforces_handle")) {
+                errors.computeIfAbsent("codeforcesHandle", k -> new java.util.ArrayList<>()).add("Codeforces handle is already taken.");
+            }
+        }
+
+        if (errors.isEmpty()) {
+            return handleRuntimeException(new RuntimeException("An error occurred"));
+        }
+
+        ApiResponseDTO<Object> response = new ApiResponseDTO<>(
+                false,
+                "Validation failed",
+                errors
+        );
+
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.BAD_REQUEST
+        );
+    }
+
     // Runtime Exceptions
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiResponseDTO<Object>>
@@ -53,6 +110,14 @@ public class GlobalExceptionHandler {
             RuntimeException ex
     ) {
         String message = ex.getMessage();
+        
+        if ("Registration failed: Invalid details".equals(message)) {
+            Map<String, java.util.List<String>> errors = new HashMap<>();
+            errors.computeIfAbsent("username", k -> new java.util.ArrayList<>()).add("Username is already taken.");
+            ApiResponseDTO<Object> errResponse = new ApiResponseDTO<>(false, "Validation failed", errors);
+            return new ResponseEntity<>(errResponse, HttpStatus.BAD_REQUEST);
+        }
+        
         // Mask specific errors to prevent information disclosure
         if (message == null || message.contains("SQL") || message.contains("NullPointer")) {
             message = "An error occurred";
