@@ -6,23 +6,37 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/api/ai")
 @RequiredArgsConstructor
 public class AiController {
 
+    private static final Logger logger = LoggerFactory.getLogger(AiController.class);
     private final AiMentorService aiMentorService;
 
     @GetMapping("/recommendations/{handle}")
     public ResponseEntity<AiResponse> getRecommendations(@PathVariable String handle) {
-        String response = aiMentorService.generateRecommendations(handle);
-        return ResponseEntity.ok(new AiResponse(response));
+        try {
+            String response = aiMentorService.generateRecommendations(handle);
+            return ResponseEntity.ok(new AiResponse(response));
+        } catch (Exception e) {
+            logger.error("AI Recommendation Error for handle {}: {}", handle, e.getMessage(), e);
+            return ResponseEntity.status(500).body(new AiResponse("Sorry, I encountered an error. Please try again."));
+        }
     }
 
     @PostMapping("/chat/{handle}")
     public ResponseEntity<AiResponse> chatWithMentor(@PathVariable String handle, @RequestBody ChatRequest request) {
-        String response = aiMentorService.chatWithMentor(handle, request.getMessage());
-        return ResponseEntity.ok(new AiResponse(response));
+        try {
+            String response = aiMentorService.chatWithMentor(handle, request.getMessage());
+            return ResponseEntity.ok(new AiResponse(response));
+        } catch (Exception e) {
+            logger.error("AI Chat Error for handle {}: {}", handle, e.getMessage(), e);
+            return ResponseEntity.status(500).body(new AiResponse("Sorry, I encountered an error. Please try again."));
+        }
     }
 
     @Data
