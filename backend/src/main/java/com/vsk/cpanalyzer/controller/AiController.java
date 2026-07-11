@@ -35,7 +35,9 @@ public class AiController {
             return ResponseEntity.ok(new AiResponse(response));
         } catch (Exception e) {
             logger.error("AI Chat Error for handle {}: {}", handle, e.getMessage(), e);
-            return ResponseEntity.status(500).body(new AiResponse("Sorry, I encountered an error. Please try again."));
+            java.io.StringWriter sw = new java.io.StringWriter();
+            e.printStackTrace(new java.io.PrintWriter(sw));
+            return ResponseEntity.status(500).body(new AiResponse("DEBUG_ERROR: " + e.getMessage() + "\nTrace: " + sw.toString()));
         }
     }
 
