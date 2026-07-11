@@ -5,6 +5,8 @@ import com.vsk.cpanalyzer.dto.LoginRequest;
 import com.vsk.cpanalyzer.dto.RegisterRequest;
 import com.vsk.cpanalyzer.dto.TokenRefreshRequest;
 import com.vsk.cpanalyzer.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,17 +22,26 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> authenticate(@RequestBody LoginRequest request) {
-        return ResponseEntity.ok(authService.authenticate(request));
+    public ResponseEntity<AuthResponse> authenticate(@Valid @RequestBody LoginRequest request, HttpServletRequest httpRequest) {
+        String ipAddress = getClientIP(httpRequest);
+        return ResponseEntity.ok(authService.authenticate(request, ipAddress));
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<AuthResponse> refreshToken(@RequestBody TokenRefreshRequest request) {
+    public ResponseEntity<AuthResponse> refreshToken(@Valid @RequestBody TokenRefreshRequest request) {
         return ResponseEntity.ok(authService.refreshToken(request));
+    }
+
+    private String getClientIP(HttpServletRequest request) {
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if (xfHeader == null || xfHeader.isEmpty() || !xfHeader.contains(request.getRemoteAddr())) {
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0];
     }
 }

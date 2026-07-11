@@ -58,6 +58,10 @@ Built as a strong student developer portfolio project to demonstrate professiona
 - **Automated Roadmaps:** Leverages **Groq's Llama 3 70B** to generate personalized practice strategies by analyzing your weakest topics.
 - **Context-Aware Chat:** Engage with an interactive AI mentor that retains your live Codeforces analytics as conversational memory.
 
+### 🔒 Enterprise-Grade Security
+- **Rate Limiting & Anti-Brute Force:** Dynamic API quotas via Bucket4j, and strict IP-based lockouts protecting authentication endpoints.
+- **Hardened Infrastructure:** Custom Content-Security-Policy (CSP), strict XSS sanitization, and BCrypt level-12 password hashing.
+
 ---
 
 ## 🏗️ Architecture (Decoupled Full-Stack)

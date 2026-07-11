@@ -1,6 +1,7 @@
 package com.vsk.cpanalyzer.config;
 
 import com.vsk.cpanalyzer.security.JwtAuthenticationFilter;
+import com.vsk.cpanalyzer.security.LoginRateLimitFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
+    private final LoginRateLimitFilter loginRateLimitFilter;
     private final AuthenticationProvider authenticationProvider;
 
     @Value("${frontend.url:http://localhost:5173}")
@@ -33,6 +35,11 @@ public class SecurityConfig {
         http
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.deny())
+                        .xssProtection(xss -> xss.disable())
+                        .contentSecurityPolicy(csp -> csp.policyDirectives("default-src 'self' https://api.groq.com https://codeforces.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://userpic.codeforces.org; script-src 'self' 'unsafe-eval' 'unsafe-inline'; frame-ancestors 'none';"))
+                )
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/public/**").permitAll()
@@ -43,6 +50,7 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authenticationProvider(authenticationProvider)
+                .addFilterBefore(loginRateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -53,11 +61,8 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
                 "http://localhost:5173",
-                "http://localhost:3000",
-                frontendUrl,
-                "https://aialgocoach.onrender.com",
-                "https://aialgocoach-frontend.onrender.com"
-        )); // Frontend URLs
+                frontendUrl
+        ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);

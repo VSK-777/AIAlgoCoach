@@ -41,5 +41,8 @@ This service acts as the bridge between the Analytics Engine and the LLM.
 ## 🔒 Security Posture
 
 - **Stateless Authentication:** No session state is held on the server. All requests must carry a valid `Authorization: Bearer <token>` header.
-- **Password Protection:** Passwords are never stored in plaintext; they are salted and hashed using `BCryptPasswordEncoder`.
+- **Password Protection:** Passwords are never stored in plaintext; they are salted and hashed using `BCryptPasswordEncoder` (Strength: 12).
 - **CORS Protection:** Cross-Origin Resource Sharing is strictly limited to the configured frontend domain via the `FRONTEND_URL` environment variable.
+- **Rate Limiting (Bucket4j):** Interceptors restrict AI endpoints (10 requests/min per user) and IP-based filters lock out brute-force login attempts (5 fails / 15 minutes).
+- **Data Integrity & XSS:** All user inputs are sanitized against Cross-Site Scripting (XSS) before hitting the PostgreSQL database.
+- **Security Headers:** Enforced `Content-Security-Policy`, `X-Frame-Options` (DENY), and masked generic server errors to prevent information disclosure.

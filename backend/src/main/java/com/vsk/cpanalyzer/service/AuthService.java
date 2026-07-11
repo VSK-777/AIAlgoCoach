@@ -8,6 +8,8 @@ import com.vsk.cpanalyzer.model.Role;
 import com.vsk.cpanalyzer.model.User;
 import com.vsk.cpanalyzer.repository.UserRepository;
 import com.vsk.cpanalyzer.security.JwtService;
+import com.vsk.cpanalyzer.security.LoginAttemptService;
+import com.vsk.cpanalyzer.security.XssUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,16 +24,20 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final LoginAttemptService loginAttemptService;
 
     public AuthResponse register(RegisterRequest request) {
-        if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already exists");
+        String safeUsername = XssUtils.sanitize(request.getUsername().trim());
+        String safeHandle = XssUtils.sanitize(request.getCodeforcesHandle());
+
+        if (userRepository.existsByUsername(safeUsername)) {
+            throw new RuntimeException("Registration failed: Invalid details");
         }
 
         var user = User.builder()
-                .username(request.getUsername())
+                .username(safeUsername)
                 .password(passwordEncoder.encode(request.getPassword()))
-                .codeforcesHandle(request.getCodeforcesHandle())
+                .codeforcesHandle(safeHandle)
                 .role(Role.USER)
                 .build();
         
@@ -48,16 +54,24 @@ public class AuthService {
                 .build();
     }
 
-    public AuthResponse authenticate(LoginRequest request) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
+    public AuthResponse authenticate(LoginRequest request, String ipAddress) {
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword()
+                    )
+            );
+        } catch (Exception e) {
+            loginAttemptService.loginFailed(ipAddress);
+            throw new RuntimeException("Invalid username or password");
+        }
+        
         var user = userRepository.findByUsername(request.getUsername())
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
                 
+        loginAttemptService.loginSucceeded(ipAddress);
+
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
 
