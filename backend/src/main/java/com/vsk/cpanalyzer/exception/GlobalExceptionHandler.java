@@ -27,25 +27,18 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException ex
     ) {
 
-        Map<String, String> errors =
-                new HashMap<>();
+        Map<String, java.util.List<String>> errors = new HashMap<>();
 
-        ex.getBindingResult()
-                .getFieldErrors()
-                .forEach(error ->
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            errors.computeIfAbsent(error.getField(), k -> new java.util.ArrayList<>())
+                  .add(error.getDefaultMessage());
+        });
 
-                        errors.put(
-                                error.getField(),
-                                error.getDefaultMessage()
-                        )
-                );
-
-        ApiResponseDTO<Object> response =
-                new ApiResponseDTO<>(
-                        false,
-                        "Validation failed",
-                        errors
-                );
+        ApiResponseDTO<Object> response = new ApiResponseDTO<>(
+                false,
+                "Validation failed",
+                errors
+        );
 
         return new ResponseEntity<>(
                 response,
@@ -87,7 +80,7 @@ public class GlobalExceptionHandler {
         ApiResponseDTO<Object> response =
                 new ApiResponseDTO<>(
                         false,
-                        ex.getMessage(),
+                        "Too many attempts. Please try again later.",
                         null
                 );
         return new ResponseEntity<>(
@@ -114,6 +107,30 @@ public class GlobalExceptionHandler {
         );
     }
 
+    @ExceptionHandler(org.springframework.security.access.AccessDeniedException.class)
+    public ResponseEntity<ApiResponseDTO<Object>> handleAccessDeniedException(
+            org.springframework.security.access.AccessDeniedException ex
+    ) {
+        ApiResponseDTO<Object> response = new ApiResponseDTO<>(
+                false,
+                "Access denied.",
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    public ResponseEntity<ApiResponseDTO<Object>> handleNotFoundException(
+            org.springframework.web.servlet.resource.NoResourceFoundException ex
+    ) {
+        ApiResponseDTO<Object> response = new ApiResponseDTO<>(
+                false,
+                "Requested resource not found.",
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
     // Generic Exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseDTO<Object>>
@@ -124,7 +141,7 @@ public class GlobalExceptionHandler {
         ApiResponseDTO<Object> response =
                 new ApiResponseDTO<>(
                         false,
-                        "Internal server error",
+                        "Something went wrong. Please try again later.",
                         null
                 );
 

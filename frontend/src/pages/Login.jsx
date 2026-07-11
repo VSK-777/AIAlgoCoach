@@ -6,13 +6,58 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [fieldErrors, setFieldErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+
+    const handleUsernameChange = (e) => {
+        const val = e.target.value;
+        setUsername(val);
+        if (fieldErrors.username) {
+            setFieldErrors(prev => {
+                const newErrs = { ...prev };
+                if (val.trim()) delete newErrs.username;
+                else newErrs.username = ["Username is required."];
+                return newErrs;
+            });
+        }
+    };
+
+    const handlePasswordChange = (e) => {
+        const val = e.target.value;
+        setPassword(val);
+        if (fieldErrors.password) {
+            setFieldErrors(prev => {
+                const newErrs = { ...prev };
+                if (val.trim()) delete newErrs.password;
+                else newErrs.password = ["Password is required."];
+                return newErrs;
+            });
+        }
+    };
 
     const handleLogin = async (e) => {
         e.preventDefault();
         setError('');
+        setFieldErrors({});
         setIsLoading(true);
+
+        // Pre-validate empty fields to improve UX
+        let hasEmpty = false;
+        const errObj = {};
+        if (!username.trim()) {
+            errObj.username = ["Username is required."];
+            hasEmpty = true;
+        }
+        if (!password.trim()) {
+            errObj.password = ["Password is required."];
+            hasEmpty = true;
+        }
+        if (hasEmpty) {
+            setFieldErrors(errObj);
+            setIsLoading(false);
+            return;
+        }
 
         try {
             const res = await api.post('/auth/login', {
@@ -27,15 +72,28 @@ const Login = () => {
             }));
             navigate('/dashboard');
         } catch (err) {
-            setError(err.response?.data?.message || 'Invalid username or password');
+            const status = err.response?.status;
+            const message = err.response?.data?.message;
+            const errors = err.response?.data?.data;
+
+            if (status === 400 && errors && Object.keys(errors).length > 0) {
+                setFieldErrors(errors);
+                setError('');
+            } else {
+                setFieldErrors({});
+                setError(message || 'Invalid username or password.');
+            }
         } finally {
             setIsLoading(false);
         }
     };
 
+    const getInputClass = (field) => {
+        return `glass-input ${fieldErrors[field] ? 'border-red-500 focus:ring-red-500/50 focus:border-red-500' : ''}`;
+    };
+
     return (
         <div className="min-h-screen flex items-center justify-center relative px-4">
-            {/* Background design */}
             <div className="absolute inset-0 bg-slate-50 overflow-hidden -z-20" />
             
             <div className="w-full max-w-md glass-card border border-white">
@@ -50,28 +108,40 @@ const Login = () => {
                     </div>
                 )}
 
-                <form onSubmit={handleLogin} className="space-y-5">
+                <form onSubmit={handleLogin} className="space-y-5" noValidate>
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Username</label>
                         <input 
                             type="text" 
-                            className="glass-input" 
+                            className={getInputClass('username')} 
                             placeholder="Enter your username"
                             value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
+                            onChange={handleUsernameChange}
                         />
+                        {fieldErrors.username && fieldErrors.username.length > 0 && (
+                            <div className="mt-1 space-y-1">
+                                {fieldErrors.username.map((err, idx) => (
+                                    <p key={idx} className="text-red-500 text-xs">❌ {err}</p>
+                                ))}
+                            </div>
+                        )}
                     </div>
                     <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
                         <input 
                             type="password" 
-                            className="glass-input" 
+                            className={getInputClass('password')} 
                             placeholder="Enter your password"
                             value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
+                            onChange={handlePasswordChange}
                         />
+                        {fieldErrors.password && fieldErrors.password.length > 0 && (
+                            <div className="mt-1 space-y-1">
+                                {fieldErrors.password.map((err, idx) => (
+                                    <p key={idx} className="text-red-500 text-xs">❌ {err}</p>
+                                ))}
+                            </div>
+                        )}
                     </div>
                     
                     <button 
