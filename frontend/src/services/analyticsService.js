@@ -1,13 +1,10 @@
-import axios from "axios";
-
-const API_BASE_URL = `${import.meta.env.VITE_API_URL || "http://localhost:8080/api"}/v1/analysis`;
-
+import api from "../api/axiosConfig";
 
 
 export const getDashboardSummary = async (handle) => {
 
-    const response = await axios.get(
-        `${API_BASE_URL}/dashboard-summary/${handle}`
+    const response = await api.get(
+        `/v1/analysis/dashboard-summary/${handle}`
     );
 
     return response.data.data;
@@ -18,8 +15,8 @@ export const getDashboardSummary = async (handle) => {
 
 export const getRatingHistory = async (handle) => {
 
-    const response = await axios.get(
-        `${API_BASE_URL}/rating-history/${handle}`
+    const response = await api.get(
+        `/v1/analysis/rating-history/${handle}`
     );
 
     return response.data.data;
@@ -30,8 +27,8 @@ export const getRatingHistory = async (handle) => {
 
 export const getTopicStrength = async (handle) => {
 
-    const response = await axios.get(
-        `${API_BASE_URL}/topic-strength/${handle}`
+    const response = await api.get(
+        `/v1/analysis/topic-strength/${handle}`
     );
 
     return response.data.data;
@@ -42,8 +39,8 @@ export const getTopicStrength = async (handle) => {
 
 export const getDifficultyDistribution = async (handle) => {
 
-    const response = await axios.get(
-        `${API_BASE_URL}/difficulty-distribution/${handle}`
+    const response = await api.get(
+        `/v1/analysis/difficulty-distribution/${handle}`
     );
 
     return response.data.data;
@@ -54,8 +51,8 @@ export const getDifficultyDistribution = async (handle) => {
 
 export const getContestPerformance = async (handle) => {
 
-    const response = await axios.get(
-        `${API_BASE_URL}/contest-performance/${handle}`
+    const response = await api.get(
+        `/v1/analysis/contest-performance/${handle}`
     );
 
     return response.data.data;
@@ -66,8 +63,8 @@ export const getContestPerformance = async (handle) => {
 
 export const getHeatmap = async (handle) => {
 
-    const response = await axios.get(
-        `${API_BASE_URL}/heatmap/${handle}`
+    const response = await api.get(
+        `/v1/analysis/heatmap/${handle}`
     );
 
     return response.data.data;
