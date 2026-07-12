@@ -16,9 +16,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+    
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -63,6 +68,7 @@ public class AuthService {
                     )
             );
         } catch (Exception e) {
+            logger.error("Authentication failed", e);
             loginAttemptService.loginFailed(ipAddress);
             throw new RuntimeException("Invalid username or password");
         }

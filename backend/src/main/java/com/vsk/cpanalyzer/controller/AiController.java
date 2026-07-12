@@ -24,9 +24,7 @@ public class AiController {
             return ResponseEntity.ok(new AiResponse(response));
         } catch (Exception e) {
             logger.error("AI workflow failed", e);
-            java.io.StringWriter sw = new java.io.StringWriter();
-            e.printStackTrace(new java.io.PrintWriter(sw));
-            return ResponseEntity.status(500).body(new AiResponse("Error: " + e.getMessage() + "\n" + sw.toString()));
+            return ResponseEntity.status(500).body(new AiResponse("AI service is temporarily unavailable. Please try again later."));
         }
     }
 
@@ -37,9 +35,7 @@ public class AiController {
             return ResponseEntity.ok(new AiResponse(response));
         } catch (Exception e) {
             logger.error("AI workflow failed", e);
-            java.io.StringWriter sw = new java.io.StringWriter();
-            e.printStackTrace(new java.io.PrintWriter(sw));
-            return ResponseEntity.status(500).body(new AiResponse("Error: " + e.getMessage() + "\n" + sw.toString()));
+            return ResponseEntity.status(500).body(new AiResponse("AI service is temporarily unavailable. Please try again later."));
         }
     }
 
