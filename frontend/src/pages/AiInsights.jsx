@@ -22,7 +22,16 @@ const AiInsights = () => {
                 const res = await api.get(`/ai/recommendations/${user.codeforcesHandle}`);
                 setRecommendations(res.data.content);
             } catch (err) {
-                setRecommendations('Failed to load recommendations. Please try again later.');
+                let errorMsg = 'Failed to load recommendations. Please try again later.';
+                if (err.response) {
+                    switch(err.response.status) {
+                        case 401: errorMsg = 'Session expired. Please sign in again.'; break;
+                        case 429: errorMsg = 'Too many AI requests. Please wait a minute and try again.'; break;
+                        case 500: errorMsg = 'AI service is temporarily unavailable. Please try again later.'; break;
+                        case 502: case 503: case 504: errorMsg = 'AI provider is currently unavailable. Please try again shortly.'; break;
+                    }
+                }
+                setRecommendations(errorMsg);
             } finally {
                 setLoadingRecs(false);
             }
@@ -51,7 +60,16 @@ const AiInsights = () => {
             const res = await api.post(`/ai/chat/${user.codeforcesHandle}`, { message: userMsg });
             setChatHistory(prev => [...prev, { role: 'ai', content: res.data.content }]);
         } catch (err) {
-            setChatHistory(prev => [...prev, { role: 'ai', content: 'Sorry, I encountered an error. Please try again.' }]);
+            let errorMsg = 'Unexpected error. Please try again.';
+            if (err.response) {
+                switch(err.response.status) {
+                    case 401: errorMsg = 'Session expired. Please sign in again.'; break;
+                    case 429: errorMsg = 'Too many AI requests. Please wait a minute and try again.'; break;
+                    case 500: errorMsg = 'AI service is temporarily unavailable. Please try again later.'; break;
+                    case 502: case 503: case 504: errorMsg = 'AI provider is currently unavailable. Please try again shortly.'; break;
+                }
+            }
+            setChatHistory(prev => [...prev, { role: 'ai', content: errorMsg }]);
         } finally {
             setChatLoading(false);
         }
