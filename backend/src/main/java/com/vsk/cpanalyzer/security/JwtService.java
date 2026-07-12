@@ -1,19 +1,18 @@
 package com.vsk.cpanalyzer.security;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.JWTVerifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 @Service
 public class JwtService {
@@ -28,22 +27,14 @@ public class JwtService {
     private long refreshExpiration;
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        return extractAllClaims(token).getSubject();
     }
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    public String generateToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails
-    ) {
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
@@ -51,24 +42,31 @@ public class JwtService {
         return buildToken(new HashMap<>(), userDetails, refreshExpiration);
     }
 
-    private String buildToken(
-            Map<String, Object> extraClaims,
-            UserDetails userDetails,
-            long expiration
-    ) {
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
-                .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256)
-                .compact();
+    private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
+        com.auth0.jwt.JWTCreator.Builder builder = JWT.create()
+                .withSubject(userDetails.getUsername())
+                .withIssuedAt(new Date(System.currentTimeMillis()))
+                .withExpiresAt(new Date(System.currentTimeMillis() + expiration));
+
+        for (Map.Entry<String, Object> entry : extraClaims.entrySet()) {
+            if (entry.getValue() instanceof String) builder.withClaim(entry.getKey(), (String) entry.getValue());
+            else if (entry.getValue() instanceof Integer) builder.withClaim(entry.getKey(), (Integer) entry.getValue());
+            else if (entry.getValue() instanceof Long) builder.withClaim(entry.getKey(), (Long) entry.getValue());
+            else if (entry.getValue() instanceof Boolean) builder.withClaim(entry.getKey(), (Boolean) entry.getValue());
+            else if (entry.getValue() instanceof Double) builder.withClaim(entry.getKey(), (Double) entry.getValue());
+            else builder.withClaim(entry.getKey(), entry.getValue().toString());
+        }
+
+        return builder.sign(getAlgorithm());
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        try {
+            final String username = extractUsername(token);
+            return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private boolean isTokenExpired(String token) {
@@ -76,25 +74,21 @@ public class JwtService {
     }
 
     private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
+        return extractAllClaims(token).getExpiresAt();
     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts
-                .parserBuilder()
-                .setSigningKey(getSignInKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+    private DecodedJWT extractAllClaims(String token) {
+        JWTVerifier verifier = JWT.require(getAlgorithm()).build();
+        return verifier.verify(token);
     }
 
-    private Key getSignInKey() {
+    private Algorithm getAlgorithm() {
         byte[] keyBytes;
         try {
-            keyBytes = Decoders.BASE64.decode(secretKey);
+            keyBytes = Base64.getDecoder().decode(secretKey);
         } catch (IllegalArgumentException e) {
-            keyBytes = secretKey.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+            keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
         }
-        return Keys.hmacShaKeyFor(keyBytes);
+        return Algorithm.HMAC256(keyBytes);
     }
 }

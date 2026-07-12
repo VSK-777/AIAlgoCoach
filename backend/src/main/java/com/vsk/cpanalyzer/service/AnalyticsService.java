@@ -21,6 +21,7 @@ public class AnalyticsService {
 
     private final CodeforcesService codeforcesService;
 
+    @org.springframework.cache.annotation.Cacheable(value = "advancedAnalytics", key = "#handle")
     public AdvancedAnalyticsDTO getAdvancedAnalytics(String handle) {
         var submissions = codeforcesService.getUserSubmissions(handle);
 
@@ -72,6 +73,7 @@ public class AnalyticsService {
                 .build();
     }
 
+    @org.springframework.cache.annotation.Cacheable(value = "analytics", key = "#handle")
     public AnalyticsDTO getAnalyticsForHandle(String handle) {
         var userInfo = codeforcesService.getUserInfo(handle);
         var submissions = codeforcesService.getUserSubmissions(handle);

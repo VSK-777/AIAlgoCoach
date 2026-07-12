@@ -18,8 +18,17 @@ RUN ./mvnw package -DskipTests
 # Run stage
 FROM eclipse-temurin:25-jre-alpine
 WORKDIR /app
+
+# Enterprise Security: Run as non-root user
+RUN addgroup -S spring && adduser -S spring -G spring
+USER spring:spring
+
 COPY --from=build /app/target/cpanalyzer-0.0.1-SNAPSHOT.jar app.jar
 
 # Render dynamic port binding (Render injects PORT env variable)
 EXPOSE 8080
-ENTRYPOINT ["java", "-Dserver.port=${PORT:8080}", "-jar", "app.jar"]
+
+# Enterprise Performance: Container-aware JVM options
+ENV JAVA_OPTS="-XX:MaxRAMPercentage=75.0 -XX:+UseZGC -XX:+ZGenerational"
+
+ENTRYPOINT sh -c "java $JAVA_OPTS -Dserver.port=${PORT:8080} -jar app.jar"
