@@ -1,6 +1,18 @@
 # AIAlgoCoach Backend API ⚙️
 
+<div align="center">
+  <h2>🌟 Live Demo: <a href="https://ai-algo-coach.vercel.app/" target="_blank">https://ai-algo-coach.vercel.app/</a> 🌟</h2>
+</div>
+
 The backend architecture is built to be robust, secure, and highly scalable. It aggregates public data from Codeforces and bridges it with modern LLMs.
+
+## 🚀 Capabilities
+
+- **Codeforces Data Aggregation:** Fetches thousands of user submissions asynchronously and aggregates them into statistical models (heatmaps, topic distributions).
+- **Prompt Engineering Engine:** Serializes massive amounts of structured user analytics into highly-optimized Markdown structures to feed into LLMs for perfect context.
+- **Groq LLM Integration:** Uses the Spring AI Framework to interact with Groq's high-speed inference engine (`llama-3.1-8b-instant`), acting as a dynamic algorithm coach.
+- **Stateless JWT Security:** Generates short-lived access tokens and long-lived refresh tokens, eliminating server-side session memory.
+- **Strict Exception Handling:** Ensures stack traces are never exposed to the frontend, gracefully failing while logging locally on Render.
 
 ## 🛠️ Core Technologies
 
@@ -46,3 +58,10 @@ This service acts as the bridge between the Analytics Engine and the LLM.
 - **Rate Limiting (Bucket4j):** Interceptors restrict AI endpoints (10 requests/min per user) and IP-based filters lock out brute-force login attempts (5 fails / 15 minutes).
 - **Data Integrity & XSS:** All user inputs are sanitized against Cross-Site Scripting (XSS) before hitting the PostgreSQL database.
 - **Security Headers:** Enforced `Content-Security-Policy`, `X-Frame-Options` (DENY), and masked generic server errors to prevent information disclosure.
+
+---
+
+<div align="center">
+  <p>Part of the <b>AIAlgoCoach</b> Platform.</p>
+  <a href="../README.md">Return to Root Directory</a>
+</div>

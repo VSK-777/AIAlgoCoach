@@ -14,6 +14,10 @@
 
 <br />
 
+<div align="center">
+  <h2>🌟 Live Demo: <a href="https://ai-algo-coach.vercel.app/" target="_blank">https://ai-algo-coach.vercel.app/</a> 🌟</h2>
+</div>
+
 AIAlgoCoach is a full-stack AI-powered Competitive Programming Analytics and Mentoring Platform. Inspired by LeetCode, Codeforces visualizers, and premium SaaS dashboards, it provides deep analytics and personalized AI mentorship to accelerate algorithmic problem-solving skills.
 
 ---
@@ -28,58 +32,90 @@ To dive into the specific codebases, please navigate to the respective documenta
 
 ---
 
-## 🎯 Project Goals
+## 🚀 Capabilities & Analysis Engine
 
-Built as a strong student developer portfolio project to demonstrate professional software engineering standards:
-* Clean GitHub repository
-* Proper README
-* Good project structure
-* Working deployment
-* Modern tech stack
-* Clear documentation
+AIAlgoCoach fetches raw data from Codeforces and performs complex data aggregation and analysis to provide actionable insights. 
 
----
-
-## 🌟 Platform Highlights
-
-### 📊 Comprehensive Dashboard
-- **Rating Progression:** Visualize your Codeforces rating history over time.
-- **Topic Mastery:** Identify your strengths across core subjects (DP, Graphs, Math) using dynamic radar charts.
-- **Difficulty Distribution:** Break down your solved problems by Codeforces rating tiers (Easy, Medium, Hard).
-- **Activity Heatmap:** A pixel-perfect, GitHub-style contribution graph mapping your daily submission frequency.
-
-### 📈 Advanced Analytics
-- **Global Success Rate:** Track your overall submission acceptance rate.
-- **Language Preferences:** Discover your most utilized programming languages with smart-grouping.
-- **Verdict Distribution:** Analyze your error trends (WA, TLE, MLE) via interactive bar charts.
-- **Comprehensive Tag Mastery:** A deep dive into your top 15 most frequently solved algorithmic tags.
+### 📊 Deep Analytics & Data Processing
+- **Rating Progression Analysis:** Visualizes the user's Codeforces rating history over time, plotting rank changes dynamically.
+- **Topic Mastery & Tag Analysis:** Aggregates thousands of submissions, groups them by algorithmic tags (e.g., DP, Graphs, Math, Greedy), and displays mastery using dynamic radar and bar charts.
+- **Difficulty Distribution:** Breaks down solved problems by Codeforces rating tiers (Easy, Medium, Hard) to help users identify their comfort zones.
+- **Activity Heatmap:** A GitHub-style contribution graph mapping daily submission frequency over the past year.
+- **Verdict Distribution:** Analyzes error trends (Accepted, Wrong Answer, Time Limit Exceeded, Memory Limit Exceeded) to help identify debugging weaknesses.
+- **Language Preferences:** Smart-grouping of programming languages (e.g., standardizing `GNU C11` and `Clang++20` under `C++`) to show the user's primary languages.
 
 ### 🧠 AI Mentorship Engine
-- **Automated Roadmaps:** Leverages **Groq's Llama 3 70B** to generate personalized practice strategies by analyzing your weakest topics.
-- **Context-Aware Chat:** Engage with an interactive AI mentor that retains your live Codeforces analytics as conversational memory.
+- **Automated Roadmaps:** Leverages **Groq's Llama 3** model (specifically `llama-3.1-8b-instant`) to generate personalized practice strategies by analyzing the user's weakest topics and recent verdicts.
+- **Context-Aware Chat:** Engage with an interactive AI mentor. The system injects the user's live Codeforces analytics into the AI's system prompt, giving it complete context about the user's skill level and current struggles.
 
 ### 🔒 Enterprise-Grade Security
-- **Rate Limiting & Anti-Brute Force:** Dynamic API quotas via Bucket4j, and strict IP-based lockouts protecting authentication endpoints.
-- **Hardened Infrastructure:** Custom Content-Security-Policy (CSP), strict XSS sanitization, and BCrypt level-12 password hashing.
+- **Stateless Authentication:** JWT-based stateless architecture.
+- **Rate Limiting:** Dynamic API quotas via Bucket4j protect AI endpoints from abuse.
+- **Anti-Brute Force:** Strict IP-based lockouts protecting authentication endpoints.
+- **Hardened Validation:** Custom backend field validation and strict XSS sanitization.
 
 ---
 
-## 🏗️ Architecture (Decoupled Full-Stack)
+## 🏗️ Architecture Diagrams
 
-AIAlgoCoach uses a **Decoupled Deployment Architecture**. The React frontend is independently deployed on **Vercel**, while the Spring Boot backend runs as a Dockerized service on **Render**, connected to a managed **Neon PostgreSQL** database.
+AIAlgoCoach uses a **Decoupled Deployment Architecture**. 
+- The React frontend is independently deployed on **Vercel**.
+- The Spring Boot backend runs as a Dockerized Web Service on **Render**.
+- Data is stored in a managed **Neon PostgreSQL** database.
+
+### System Architecture
 
 ```mermaid
-graph LR
-    A[React/Vite on Vercel] <-->|REST + JWT| B(Spring Boot on Render)
-    B <-->|Aggregates Data| C[Codeforces Public API]
-    B <-->|Mentorship Prompts| D[Groq AI / Llama 3]
-    B <-->|Persists Users| E[(Neon PostgreSQL)]
+graph TD
+    subgraph Client Tier
+        UI[React Frontend SPA<br/>Hosted on Vercel]
+    end
+
+    subgraph API Tier
+        API[Spring Boot Backend<br/>Hosted on Render]
+        Security[Spring Security & JWT]
+        RateLimit[Bucket4j Rate Limiter]
+        
+        API --> Security
+        Security --> RateLimit
+    end
+
+    subgraph Data Tier
+        DB[(Neon PostgreSQL DB<br/>Users & Auth Data)]
+    end
+
+    subgraph External Services
+        CF[Codeforces API<br/>Public Submissions & Rating]
+        AI[Groq API<br/>Llama 3 LLM Inference]
+    end
+
+    UI <==>|REST JSON over HTTPS| API
+    API <==>|JPA / Hibernate| DB
+    API ==>|Fetch User Data| CF
+    API ==>|Prompt Engineering| AI
 ```
 
-### Components
-1. **[Backend API](./backend/README.md):** Java 21 & Spring Boot, Dockerized and deployed on Render. Powers the data aggregation engine, Security (JWT/BCrypt), and Spring AI integrations.
-2. **[Frontend SPA](./frontend/README.md):** React & Vite, deployed on Vercel. Features a premium glassmorphism aesthetic, responsive Tailwind layouts, and Recharts data visualizations.
-3. **Database:** Neon PostgreSQL (serverless, managed).
+### AI Workflow Execution Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant Backend
+    participant Codeforces
+    participant Groq_AI
+    
+    User->>Frontend: Clicks "Generate Roadmap"
+    Frontend->>Backend: GET /api/ai/recommendations/{handle} (with JWT)
+    Backend->>Backend: Validate JWT & Apply Rate Limits
+    Backend->>Codeforces: Fetch user.info, user.rating, user.status
+    Codeforces-->>Backend: Returns raw JSON payload
+    Backend->>Backend: Aggregate & Analyze Submissions (Tags, Verdicts)
+    Backend->>Groq_AI: Send System Prompt + Aggregated Analytics
+    Groq_AI-->>Backend: Returns AI Response (Markdown)
+    Backend-->>Frontend: Returns Formatted AI Response
+    Frontend-->>User: Renders Roadmap in UI
+```
 
 ---
 

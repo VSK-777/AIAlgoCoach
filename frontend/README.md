@@ -1,6 +1,19 @@
 # AIAlgoCoach Frontend 🎨
 
+<div align="center">
+  <h2>🌟 Live Demo: <a href="https://ai-algo-coach.vercel.app/" target="_blank">https://ai-algo-coach.vercel.app/</a> 🌟</h2>
+</div>
+
 The AIAlgoCoach frontend is a blazing-fast Single Page Application (SPA) built with React and Vite. It serves as the presentation layer, turning raw Codeforces and AI data into a beautiful, interactive dashboard.
+
+## 🚀 Capabilities
+
+- **Interactive AI Chat:** A Markdown-rendered chat interface for real-time algorithmic mentoring.
+- **Dynamic Dashboards:** Beautiful UI for visualizing competitive programming metrics.
+- **Activity Heatmaps:** Renders GitHub-style yearly contribution grids for problem-solving streaks.
+- **Complex Visualizations:** Generates Radar Charts for topic mastery, Pie Charts for language preferences, and Bar Charts for verdict history.
+- **Responsive Design:** Optimized for both desktop and mobile viewing with a consistent "Glassmorphism" aesthetic.
+- **Secure JWT Handling:** Built-in Axios interceptors seamlessly handle access and refresh token lifecycles in the background.
 
 ## 🛠️ Core Technologies
 
@@ -32,3 +45,10 @@ src/
 ├── App.jsx          # Route definitions and `<PrivateRoute>` wrappers
 └── index.css        # Tailwind directives and custom component layers
 ```
+
+---
+
+<div align="center">
+  <p>Part of the <b>AIAlgoCoach</b> Platform.</p>
+  <a href="../README.md">Return to Root Directory</a>
+</div>
