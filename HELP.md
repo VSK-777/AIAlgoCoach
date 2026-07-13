@@ -19,7 +19,7 @@ Built as a strong student developer portfolio project to demonstrate professiona
 ## 📋 System Prerequisites
 
 Ensure the following runtimes and services are available on your host machine:
-- **Java 21+** (OpenJDK or Oracle)
+- **Java 25+** (OpenJDK or Oracle)
 - **Node.js 20+** & NPM
 - **PostgreSQL** (local instance for development, or use a Neon serverless database)
 - **Groq API Key** (Get one at [console.groq.com](https://console.groq.com))

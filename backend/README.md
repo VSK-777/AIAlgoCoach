@@ -16,9 +16,9 @@ The backend architecture is built to be robust, secure, and highly scalable. It 
 
 ## 🛠️ Core Technologies
 
-- **Spring Boot 3.5.x:** The core framework.
-- **Java 21:** Utilizing modern features and LTS stability.
-- **Spring Security 6:** Implementing a stateless, filter-chain-based security architecture.
+- **Spring Boot 4.1.x:** The core framework.
+- **Java 25 LTS:** Utilizing modern features and LTS stability.
+- **Spring Security 7.x:** Implementing a stateless, filter-chain-based security architecture.
 - **JWT (JSON Web Tokens):** Secure session management with short-lived access tokens and long-lived refresh tokens.
 - **Spring AI:** Abstraction layer used to seamlessly communicate with Groq's blazing-fast inference endpoints for Llama 3.
 - **Spring Data JPA:** Hibernate-backed ORM for secure PostgreSQL transactions via Neon.
