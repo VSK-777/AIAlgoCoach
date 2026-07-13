@@ -5,6 +5,7 @@ import MainLayout from './layouts/MainLayout';
 import Dashboard from './pages/Dashboard';
 import AiInsights from './pages/AiInsights';
 import Analytics from './pages/Analytics';
+import AboutDeveloper from './pages/AboutDeveloper';
 
 const PrivateRoute = ({ children }) => {
     const isAuthenticated = !!localStorage.getItem('accessToken');
@@ -27,6 +28,7 @@ function App() {
         <Route path="/dashboard/:handle" element={<Dashboard />} />
         <Route path="/ai-insights" element={<AiInsights />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/about" element={<AboutDeveloper />} />
       </Route>
     </Routes>
   );

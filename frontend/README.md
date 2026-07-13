@@ -39,9 +39,10 @@ The entire UI is built around a unified aesthetic:
 src/
 ├── api/             # Global Axios instance & JWT Interceptors
 ├── components/      
+│   ├── about/       # Modular UI blocks for the About page
 │   ├── charts/      # Complex Visualizations (Recharts wrappers)
 │   └── layout/      # Structural UI (Sidebar, Header)
-├── pages/           # Main Views (Dashboard, Analytics, AI Insights)
+├── pages/           # Main Views (Dashboard, Analytics, AI Insights, AboutDeveloper)
 ├── App.jsx          # Route definitions and `<PrivateRoute>` wrappers
 └── index.css        # Tailwind directives and custom component layers
 ```

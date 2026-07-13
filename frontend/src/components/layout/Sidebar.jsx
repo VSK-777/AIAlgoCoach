@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Brain, Activity, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Brain, Activity, LogOut, ChevronLeft, ChevronRight, User } from 'lucide-react';
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
     const navigate = useNavigate();
@@ -17,6 +17,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
         { name: 'Dashboard', icon: LayoutDashboard, path: `/dashboard` },
         { name: 'AI Insights', icon: Brain, path: '/ai-insights' },
         { name: 'Analytics', icon: Activity, path: '/analytics' },
+        { name: 'About AIAlgoCoach', icon: User, path: '/about' },
     ];
 
     return (
