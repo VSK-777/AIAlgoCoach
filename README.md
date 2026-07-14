@@ -32,6 +32,19 @@ To dive into the specific codebases, please navigate to the respective documenta
 
 ---
 
+## 💻 Tech Stack
+
+| Category | Technology |
+| --- | --- |
+| **Frontend** | React 19, Vite 8, Tailwind CSS, Recharts, React Router DOM 7 |
+| **Backend** | Java 25, Spring Boot 4.1.x, Spring Security, Spring AI, Spring Data JPA |
+| **Database** | Neon PostgreSQL, Flyway |
+| **AI Integration** | Groq API (Llama 3.1 8b Instant) |
+| **Security** | JWT, Bucket4j, Caffeine Cache, OWASP HTML Sanitizer |
+| **Deployment** | Vercel (Frontend), AWS Elastic Beanstalk (Backend), Docker |
+
+---
+
 ## 🚀 Capabilities & Analysis Engine
 
 AIAlgoCoach fetches raw data from Codeforces and performs complex data aggregation and analysis to provide actionable insights. 
