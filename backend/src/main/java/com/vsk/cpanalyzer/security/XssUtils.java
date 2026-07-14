@@ -1,16 +1,16 @@
 package com.vsk.cpanalyzer.security;
 
+import org.owasp.html.PolicyFactory;
+import org.owasp.html.Sanitizers;
+
 public class XssUtils {
+
+    private static final PolicyFactory POLICY = Sanitizers.FORMATTING.and(Sanitizers.LINKS).and(Sanitizers.BLOCKS);
 
     public static String sanitize(String value) {
         if (value == null) {
             return null;
         }
-        // Basic sanitization: strip script tags and dangerous HTML characters
-        value = value.replaceAll("(?i)<script.*?>.*?</script.*?>", "");
-        value = value.replaceAll("(?i)<.*?javascript:.*?>.*?</.*?>", "");
-        value = value.replaceAll("(?i)<.*?\\s+on.*?>.*?</.*?>", "");
-        value = value.replace("<", "&lt;").replace(">", "&gt;");
-        return value;
+        return POLICY.sanitize(value);
     }
 }

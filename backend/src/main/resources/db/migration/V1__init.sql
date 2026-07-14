@@ -1,0 +1,7 @@
+CREATE TABLE IF NOT EXISTS users (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    codeforces_handle VARCHAR(255) UNIQUE,
+    role VARCHAR(50) NOT NULL
+);

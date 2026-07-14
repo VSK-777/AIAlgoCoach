@@ -13,15 +13,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.time.Duration;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 
 @Component
 @RequiredArgsConstructor
 public class AiRateLimitInterceptor implements HandlerInterceptor {
 
     private final ObjectMapper objectMapper;
-    private final Map<String, Bucket> cache = new ConcurrentHashMap<>();
+    private final Cache<String, Bucket> cache = Caffeine.newBuilder()
+            .expireAfterAccess(Duration.ofMinutes(10))
+            .maximumSize(10000)
+            .build();
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -31,7 +34,7 @@ public class AiRateLimitInterceptor implements HandlerInterceptor {
             return true; // Let security handle unauthenticated access
         }
 
-        Bucket bucket = cache.computeIfAbsent(username, this::createNewBucket);
+        Bucket bucket = cache.get(username, this::createNewBucket);
 
         if (bucket.tryConsume(1)) {
             return true;

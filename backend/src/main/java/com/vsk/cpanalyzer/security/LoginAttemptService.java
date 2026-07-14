@@ -1,9 +1,11 @@
 package com.vsk.cpanalyzer.security;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 public class LoginAttemptService {
@@ -11,12 +13,19 @@ public class LoginAttemptService {
     private final int MAX_ATTEMPT = 5;
     private final int LOCK_TIME_MINUTES = 15;
 
-    private final ConcurrentHashMap<String, Integer> attemptsCache = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<String, LocalDateTime> lockCache = new ConcurrentHashMap<>();
+    private final Cache<String, Integer> attemptsCache = Caffeine.newBuilder()
+            .expireAfterWrite(Duration.ofHours(1))
+            .maximumSize(10000)
+            .build();
+
+    private final Cache<String, LocalDateTime> lockCache = Caffeine.newBuilder()
+            .expireAfterWrite(Duration.ofMinutes(LOCK_TIME_MINUTES))
+            .maximumSize(10000)
+            .build();
 
     public void loginSucceeded(String key) {
-        attemptsCache.remove(key);
-        lockCache.remove(key);
+        attemptsCache.invalidate(key);
+        lockCache.invalidate(key);
     }
 
     public void loginFailed(String key) {
@@ -24,7 +33,10 @@ public class LoginAttemptService {
             return;
         }
         
-        int attempts = attemptsCache.getOrDefault(key, 0);
+        Integer attempts = attemptsCache.getIfPresent(key);
+        if (attempts == null) {
+            attempts = 0;
+        }
         attempts++;
         attemptsCache.put(key, attempts);
 
@@ -34,15 +46,14 @@ public class LoginAttemptService {
     }
 
     public boolean isBlocked(String key) {
-        if (!lockCache.containsKey(key)) {
+        LocalDateTime lockTime = lockCache.getIfPresent(key);
+        if (lockTime == null) {
             return false;
         }
 
-        LocalDateTime lockTime = lockCache.get(key);
         if (lockTime.isBefore(LocalDateTime.now())) {
-            // Lock expired
-            attemptsCache.remove(key);
-            lockCache.remove(key);
+            attemptsCache.invalidate(key);
+            lockCache.invalidate(key);
             return false;
         }
         return true;

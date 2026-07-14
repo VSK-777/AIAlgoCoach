@@ -12,7 +12,7 @@ The backend architecture is built to be robust, secure, and highly scalable. It 
 - **Prompt Engineering Engine:** Serializes massive amounts of structured user analytics into highly-optimized Markdown structures to feed into LLMs for perfect context.
 - **Groq LLM Integration:** Uses the Spring AI Framework to interact with Groq's high-speed inference engine (`llama-3.1-8b-instant`), acting as a dynamic algorithm coach.
 - **Stateless JWT Security:** Generates short-lived access tokens and long-lived refresh tokens, eliminating server-side session memory.
-- **Strict Exception Handling:** Ensures stack traces are never exposed to the frontend, gracefully failing while logging locally on Render.
+- **Strict Exception Handling:** Ensures stack traces are never exposed to the frontend, gracefully failing while logging structured JSON payloads locally on AWS CloudWatch.
 
 ## 🛠️ Core Technologies
 
@@ -22,6 +22,8 @@ The backend architecture is built to be robust, secure, and highly scalable. It 
 - **JWT (JSON Web Tokens):** Secure session management with short-lived access tokens and long-lived refresh tokens.
 - **Spring AI:** Abstraction layer used to seamlessly communicate with Groq's blazing-fast inference endpoints for Llama 3.
 - **Spring Data JPA:** Hibernate-backed ORM for secure PostgreSQL transactions via Neon.
+- **Flyway:** Automated database schema migrations ensuring production-safe rollouts.
+- **Caffeine Cache:** High-performance, low-latency caching engine utilized for robust rate limiting.
 
 ## 📁 Architectural Layout
 
@@ -55,8 +57,8 @@ This service acts as the bridge between the Analytics Engine and the LLM.
 - **Stateless Authentication:** No session state is held on the server. All requests must carry a valid `Authorization: Bearer <token>` header.
 - **Password Protection:** Passwords are never stored in plaintext; they are salted and hashed using `BCryptPasswordEncoder` (Strength: 12).
 - **CORS Protection:** Cross-Origin Resource Sharing is strictly limited to the configured frontend domain via the `FRONTEND_URL` environment variable.
-- **Rate Limiting (Bucket4j):** Interceptors restrict AI endpoints (10 requests/min per user) and IP-based filters lock out brute-force login attempts (5 fails / 15 minutes).
-- **Data Integrity & XSS:** All user inputs are sanitized against Cross-Site Scripting (XSS) before hitting the PostgreSQL database.
+- **Rate Limiting (Bucket4j + Caffeine):** Interceptors restrict AI endpoints (10 requests/min per user) and IP-based filters lock out brute-force login attempts (5 fails / 15 minutes) using high-speed eviction caches.
+- **Data Integrity & XSS:** All user inputs are sanitized against Cross-Site Scripting (XSS) using the `OWASP Java HTML Sanitizer` before hitting the PostgreSQL database.
 - **Security Headers:** Enforced `Content-Security-Policy`, `X-Frame-Options` (DENY), and masked generic server errors to prevent information disclosure.
 
 ---

@@ -9,7 +9,7 @@
   <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/>
   <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel"/>
-  <img src="https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=white" alt="Render"/>
+  <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS"/>
 </div>
 
 <br />
@@ -60,7 +60,7 @@ AIAlgoCoach fetches raw data from Codeforces and performs complex data aggregati
 
 AIAlgoCoach uses a **Decoupled Deployment Architecture**. 
 - The React frontend is independently deployed on **Vercel**.
-- The Spring Boot backend runs as a Dockerized Web Service on **Render**.
+- The Spring Boot backend runs as a highly-available Dockerized Web Service on **AWS Elastic Beanstalk**.
 - Data is stored in a managed **Neon PostgreSQL** database.
 
 ### System Architecture
@@ -72,7 +72,7 @@ graph TD
     end
 
     subgraph API Tier
-        API[Spring Boot Backend<br/>Hosted on Render]
+        API[Spring Boot Backend<br/>Hosted on AWS Elastic Beanstalk]
         Security[Spring Security & JWT]
         RateLimit[Bucket4j Rate Limiter]
         
@@ -135,4 +135,4 @@ If you are a developer looking to build, test, or deploy this application, pleas
 Passionate about developing futuristic AI assistants, scalable software systems, and modern full-stack applications using professional software engineering principles. Focused on building scalable AI-powered full-stack applications and futuristic intelligent systems.
 
 - **Current Focus:** Full Stack Java Development, AI Engineering, Spring Boot Microservices, React Development, and Intelligent AI Systems.
-- **Skills:** Java, Spring Boot, React, REST APIs, PostgreSQL, JWT Authentication, Docker, AI Integration, Groq API, Vercel, Render, and Data Structures & Algorithms.
+- **Skills:** Java, Spring Boot, React, REST APIs, PostgreSQL, JWT Authentication, Docker, AI Integration, Groq API, Vercel, AWS, and Data Structures & Algorithms.

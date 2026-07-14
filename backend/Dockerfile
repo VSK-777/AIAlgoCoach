@@ -16,7 +16,7 @@ COPY src src
 RUN ./mvnw package -DskipTests
 
 # Run stage
-FROM eclipse-temurin:25-jre-alpine
+FROM amazoncorretto:25-alpine
 WORKDIR /app
 
 # Enterprise Security: Run as non-root user
@@ -31,4 +31,4 @@ EXPOSE 8080
 # Enterprise Performance: Container-aware JVM options
 ENV JAVA_OPTS="-XX:MaxRAMPercentage=75.0 -XX:+UseZGC -XX:+ZGenerational"
 
-ENTRYPOINT sh -c "java $JAVA_OPTS -Dserver.port=${PORT:8080} -jar app.jar"
+ENTRYPOINT sh -c "java $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar app.jar"

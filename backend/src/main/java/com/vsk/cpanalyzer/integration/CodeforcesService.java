@@ -7,18 +7,18 @@ import com.vsk.cpanalyzer.dto.CFUserInfo;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
 @Service
 public class CodeforcesService {
 
-    private final RestTemplate restTemplate;
+    private final RestClient restClient;
     private static final String BASE_URL = "https://codeforces.com/api/";
 
-    public CodeforcesService() {
-        this.restTemplate = new RestTemplate();
+    public CodeforcesService(RestClient restClient) {
+        this.restClient = restClient;
     }
 
     public CFUserInfo getUserInfo(String handle) {
@@ -27,9 +27,10 @@ public class CodeforcesService {
         ParameterizedTypeReference<CFResponse<CFUserInfo>> responseType = 
                 new ParameterizedTypeReference<>() {};
                 
-        CFResponse<CFUserInfo> response = restTemplate.exchange(
-                url, HttpMethod.GET, null, responseType
-        ).getBody();
+        CFResponse<CFUserInfo> response = restClient.get()
+                .uri(url)
+                .retrieve()
+                .body(responseType);
         
         if (response != null && "OK".equals(response.getStatus()) && !response.getResult().isEmpty()) {
             return response.getResult().get(0);
@@ -43,9 +44,10 @@ public class CodeforcesService {
         ParameterizedTypeReference<CFResponse<CFSubmission>> responseType = 
                 new ParameterizedTypeReference<>() {};
                 
-        CFResponse<CFSubmission> response = restTemplate.exchange(
-                url, HttpMethod.GET, null, responseType
-        ).getBody();
+        CFResponse<CFSubmission> response = restClient.get()
+                .uri(url)
+                .retrieve()
+                .body(responseType);
         
         if (response != null && "OK".equals(response.getStatus())) {
             return response.getResult();
@@ -59,9 +61,10 @@ public class CodeforcesService {
         ParameterizedTypeReference<CFResponse<CFRatingChange>> responseType = 
                 new ParameterizedTypeReference<>() {};
                 
-        CFResponse<CFRatingChange> response = restTemplate.exchange(
-                url, HttpMethod.GET, null, responseType
-        ).getBody();
+        CFResponse<CFRatingChange> response = restClient.get()
+                .uri(url)
+                .retrieve()
+                .body(responseType);
         
         if (response != null && "OK".equals(response.getStatus())) {
             return response.getResult();

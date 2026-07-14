@@ -2,25 +2,47 @@
 .idea/
 .vscode/
 *.iml
+*.iws
+*.ipr
 .DS_Store
 Thumbs.db
+.settings/
+.classpath
+.project
+.factorypath
+.springBeans
+.sts4-cache
+.apt_generated
 
 # Root build artifacts
 target/
+build/
+out/
+dist/
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # Environment variables (Critical Security)
 .env
 .env.local
 .env.*.local
-
-# Note: The backend and frontend directories have their own specific .gitignore files 
-# for node_modules, maven targets, etc. This file just protects the root monorepo.
+.env.*.development
+.env.*.test
+.env.*.production
 
 # Node modules
 node_modules/
+.npm/
 
-# React build
-dist/
 # Large media files
 *.mp4
+*.mkv
+*.zip
+*.jar
+*.war
+Project Recording Video.mp4
+Project Recording.mp4
+thumbnail.png
