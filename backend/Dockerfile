@@ -29,6 +29,6 @@ COPY --from=build /app/target/cpanalyzer-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 8080
 
 # Enterprise Performance: Container-aware JVM options
-ENV JAVA_OPTS="-XX:MaxRAMPercentage=75.0 -XX:+UseZGC -XX:+ZGenerational"
+ENV JAVA_OPTS="-XX:MaxRAMPercentage=50.0 -XX:+UseSerialGC -Xss256k -XX:MaxMetaspaceSize=160m -XX:ReservedCodeCacheSize=64m -XX:+ExitOnOutOfMemoryError"
 
 ENTRYPOINT sh -c "java $JAVA_OPTS -Dserver.port=${PORT:-8080} -jar app.jar"

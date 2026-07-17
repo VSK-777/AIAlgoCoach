@@ -23,7 +23,7 @@ public class AiRateLimitInterceptor implements HandlerInterceptor {
     private final ObjectMapper objectMapper;
     private final Cache<String, Bucket> cache = Caffeine.newBuilder()
             .expireAfterAccess(Duration.ofMinutes(10))
-            .maximumSize(10000)
+            .maximumSize(1000)
             .build();
 
     @Override

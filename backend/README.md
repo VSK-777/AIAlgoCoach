@@ -12,7 +12,7 @@ The backend architecture is built to be robust, secure, and highly scalable. It 
 - **Prompt Engineering Engine:** Serializes massive amounts of structured user analytics into highly-optimized Markdown structures to feed into LLMs for perfect context.
 - **Groq LLM Integration:** Uses the Spring AI Framework to interact with Groq's high-speed inference engine (`llama-3.1-8b-instant`), acting as a dynamic algorithm coach.
 - **Stateless JWT Security:** Generates short-lived access tokens and long-lived refresh tokens, eliminating server-side session memory.
-- **Strict Exception Handling:** Ensures stack traces are never exposed to the frontend, gracefully failing while logging structured JSON payloads locally on AWS CloudWatch.
+- **Strict Exception Handling:** Ensures stack traces are never exposed to the frontend, gracefully failing while logging structured JSON payloads locally on Render Log Streams or AWS CloudWatch.
 
 ## 🛠️ Core Technologies
 

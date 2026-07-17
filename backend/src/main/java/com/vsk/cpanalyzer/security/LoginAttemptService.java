@@ -15,12 +15,12 @@ public class LoginAttemptService {
 
     private final Cache<String, Integer> attemptsCache = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofHours(1))
-            .maximumSize(10000)
+            .maximumSize(1000)
             .build();
 
     private final Cache<String, LocalDateTime> lockCache = Caffeine.newBuilder()
             .expireAfterWrite(Duration.ofMinutes(LOCK_TIME_MINUTES))
-            .maximumSize(10000)
+            .maximumSize(1000)
             .build();
 
     public void loginSucceeded(String key) {
