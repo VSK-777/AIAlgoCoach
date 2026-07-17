@@ -8,7 +8,7 @@
   <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"/>
   <img src="https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/>
-
+  <img src="https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white" alt="Vercel"/>
   <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white" alt="AWS"/>
 </div>
 
@@ -41,7 +41,7 @@ To dive into the specific codebases, please navigate to the respective documenta
 | **Database** | Neon PostgreSQL, Flyway |
 | **AI Integration** | Groq API (Llama 3.1 8b Instant) |
 | **Security** | JWT, Bucket4j, Caffeine Cache, OWASP HTML Sanitizer |
-| **Deployment** | AWS Elastic Beanstalk (Single Executable JAR), Docker |
+| **Deployment** | Vercel (Frontend), AWS Elastic Beanstalk (Backend), Docker |
 
 ---
 
@@ -71,9 +71,9 @@ AIAlgoCoach fetches raw data from Codeforces and performs complex data aggregati
 
 ## 🏗️ Architecture Diagrams
 
-AIAlgoCoach uses a **Unified Deployment Architecture**. 
-- The React frontend is bundled directly into the Spring Boot backend during the Maven build process.
-- The unified application is deployed as ONE executable Spring Boot JAR on **AWS Elastic Beanstalk**.
+AIAlgoCoach uses a **Decoupled Deployment Architecture**. 
+- The React frontend is independently deployed on **Vercel**.
+- The Spring Boot backend runs as a highly-available Dockerized Web Service on **AWS Elastic Beanstalk**.
 - Data is stored in a managed **Neon PostgreSQL** database.
 
 ### System Architecture
@@ -81,11 +81,11 @@ AIAlgoCoach uses a **Unified Deployment Architecture**.
 ```mermaid
 graph TD
     subgraph Client Tier
-        UI[User Browser]
+        UI[React Frontend SPA<br/>Hosted on Vercel]
     end
 
     subgraph API Tier
-        API[Spring Boot + React SPA<br/>Hosted on AWS Elastic Beanstalk]
+        API[Spring Boot Backend<br/>Hosted on AWS Elastic Beanstalk]
         Security[Spring Security & JWT]
         RateLimit[Bucket4j Rate Limiter]
         
@@ -102,7 +102,7 @@ graph TD
         AI[Groq API<br/>Llama 3 LLM Inference]
     end
 
-    UI <==>|REST JSON| API
+    UI <==>|REST JSON over HTTPS| API
     API <==>|JPA / Hibernate| DB
     API ==>|Fetch User Data| CF
     API ==>|Prompt Engineering| AI
@@ -148,4 +148,4 @@ If you are a developer looking to build, test, or deploy this application, pleas
 Passionate about developing futuristic AI assistants, scalable software systems, and modern full-stack applications using professional software engineering principles. Focused on building scalable AI-powered full-stack applications and futuristic intelligent systems.
 
 - **Current Focus:** Full Stack Java Development, AI Engineering, Spring Boot Microservices, React Development, and Intelligent AI Systems.
-- **Skills:** Java, Spring Boot, React, REST APIs, PostgreSQL, JWT Authentication, Docker, AI Integration, Groq API, AWS, and Data Structures & Algorithms. 
+- **Skills:** Java, Spring Boot, React, REST APIs, PostgreSQL, JWT Authentication, Docker, AI Integration, Groq API, Vercel, AWS, and Data Structures & Algorithms. 
