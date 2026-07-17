@@ -66,12 +66,13 @@ The backend is a Spring Boot application using Maven.
    ```
 3. The API will be exposed at `http://localhost:8080/api`.
 
-### Production Deployment (Docker on Render)
-The backend is containerized using Docker and deployed on Render.
+### Production Deployment (AWS Elastic Beanstalk)
+The backend and frontend are bundled into ONE executable JAR and deployed on AWS Elastic Beanstalk.
 
 1. The `Dockerfile` in the `backend/` directory handles the entire build process.
-2. On Render, create a **Web Service** pointing to the `backend/Dockerfile`.
-3. Configure the following environment variables on the Render dashboard:
+2. Run `mvn clean package` to bundle both frontend and backend.
+3. Deploy the resulting JAR to an AWS Elastic Beanstalk Single Instance environment.
+4. Configure the following environment variables on the AWS EB dashboard:
 
 | Variable | Description |
 |---|---|
@@ -80,9 +81,6 @@ The backend is containerized using Docker and deployed on Render.
 | `DB_PASSWORD` | Neon PostgreSQL password |
 | `JWT_SECRET` | Secure 256-bit secret for JWT signing |
 | `GROQ_API_KEY` | Groq AI API key |
-| `FRONTEND_URL` | Your Vercel frontend URL (e.g., `https://aialgocoach.vercel.app`) |
-
-*For deeper backend configurations, read [backend/HELP.md](./backend/HELP.md).*
 
 ---
 
@@ -102,18 +100,12 @@ The frontend is a React Single Page Application (SPA) bundled by Vite.
    ```
 4. Access the UI at `http://localhost:5173`.
 
-### Production Deployment (Vercel)
-1. Push your repository to GitHub.
-2. Import the project into [Vercel](https://vercel.com).
-3. Set the **Root Directory** to `frontend`.
-4. Set the **Build Command** to `npm run build`.
-5. Set the **Output Directory** to `dist`.
-6. Add the environment variable `VITE_API_URL` pointing to your Render backend (e.g., `https://aialgocoach-backend.onrender.com/api`).
-7. Deploy!
-
-*For deeper frontend configurations, read [frontend/HELP.md](./frontend/HELP.md).*
-
----
+### Production Deployment (Bundled with Spring Boot)
+The frontend is no longer deployed separately.
+1. Run `mvn clean package` in the `backend` directory.
+2. The Maven build automatically installs Node.js, runs `npm install`, and builds the React app.
+3. The resulting static files are placed in `backend/target/classes/static`.
+4. The Spring Boot backend serves these files directly as a Single Page Application (SPA).
 
 ## 👨‍💻 About the Developer
 
@@ -123,4 +115,4 @@ The frontend is a React Single Page Application (SPA) bundled by Vite.
 Passionate about developing futuristic AI assistants, scalable software systems, and modern full-stack applications using professional software engineering principles. Focused on building scalable AI-powered full-stack applications and futuristic intelligent systems.
 
 - **Current Focus:** Full Stack Java Development, AI Engineering, Spring Boot Microservices, React Development, and Intelligent AI Systems.
-- **Skills:** Java, Spring Boot, React, REST APIs, PostgreSQL, JWT Authentication, Docker, AI Integration, Groq API, Vercel, Render, and Data Structures & Algorithms.
+- **Skills:** Java, Spring Boot, React, REST APIs, PostgreSQL, JWT Authentication, Docker, AI Integration, Groq API, AWS Elastic Beanstalk, and Data Structures & Algorithms.

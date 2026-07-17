@@ -30,8 +30,8 @@ public class AiIntegrationTest {
     @org.springframework.boot.test.context.TestConfiguration
     static class Config {
         @org.springframework.context.annotation.Bean
-        public com.fasterxml.jackson.databind.ObjectMapper objectMapper() {
-            return new com.fasterxml.jackson.databind.ObjectMapper();
+        public tools.jackson.databind.ObjectMapper objectMapper() {
+            return new tools.jackson.databind.ObjectMapper();
         }
     }
 

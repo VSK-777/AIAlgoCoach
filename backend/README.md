@@ -1,8 +1,5 @@
 # AIAlgoCoach Backend API ⚙️
 
-<div align="center">
-  <h2>🌟 Live Demo: <a href="https://ai-algo-coach.vercel.app/" target="_blank">https://ai-algo-coach.vercel.app/</a> 🌟</h2>
-</div>
 
 The backend architecture is built to be robust, secure, and highly scalable. It aggregates public data from Codeforces and bridges it with modern LLMs.
 

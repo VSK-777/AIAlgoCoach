@@ -1,8 +1,5 @@
 # AIAlgoCoach Frontend 🎨
 
-<div align="center">
-  <h2>🌟 Live Demo: <a href="https://ai-algo-coach.vercel.app/" target="_blank">https://ai-algo-coach.vercel.app/</a> 🌟</h2>
-</div>
 
 The AIAlgoCoach frontend is a blazing-fast Single Page Application (SPA) built with React and Vite. It serves as the presentation layer, turning raw Codeforces and AI data into a beautiful, interactive dashboard.
 

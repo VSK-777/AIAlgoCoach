@@ -1,6 +1,6 @@
 package com.vsk.cpanalyzer.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.vsk.cpanalyzer.dto.ErrorResponseDTO;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
