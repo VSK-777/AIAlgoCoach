@@ -15,8 +15,13 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     // Validation Exceptions
     @ExceptionHandler(
@@ -75,6 +80,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponseDTO<Object>> handleDataIntegrityViolationException(
             org.springframework.dao.DataIntegrityViolationException ex
     ) {
+        logger.error("[DIAG] DataIntegrityViolationException caught", ex);
         Map<String, java.util.List<String>> errors = new HashMap<>();
         String message = ex.getMostSpecificCause().getMessage();
         
@@ -109,6 +115,7 @@ public class GlobalExceptionHandler {
     handleRuntimeException(
             RuntimeException ex
     ) {
+        logger.error("[DIAG] RuntimeException caught: {}", ex.getClass().getName(), ex);
         String message = ex.getMessage();
         
         if ("Registration failed: Invalid details".equals(message)) {
@@ -202,6 +209,7 @@ public class GlobalExceptionHandler {
     handleGenericException(
             Exception ex
     ) {
+        logger.error("[DIAG] GENERIC Exception caught. Type: {} | Message: {}", ex.getClass().getName(), ex.getMessage(), ex);
 
         ApiResponseDTO<Object> response =
                 new ApiResponseDTO<>(

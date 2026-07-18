@@ -32,24 +32,38 @@ public class AuthService {
     private final LoginAttemptService loginAttemptService;
 
     public AuthResponse register(RegisterRequest request) {
+        logger.info("[DIAG] Step 1: register() entered");
+        
         String safeUsername = XssUtils.sanitize(request.getUsername().trim());
         String safeHandle = XssUtils.sanitize(request.getCodeforcesHandle());
+        logger.info("[DIAG] Step 2: XSS sanitized. username='{}', handle='{}'", safeUsername, safeHandle);
 
         if (userRepository.existsByUsername(safeUsername)) {
+            logger.info("[DIAG] Step 3: username already exists, throwing");
             throw new RuntimeException("Registration failed: Invalid details");
         }
+        logger.info("[DIAG] Step 3: existsByUsername passed (no duplicate)");
+
+        logger.info("[DIAG] Step 4: encoding password");
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        logger.info("[DIAG] Step 4: password encoded successfully");
 
         var user = User.builder()
                 .username(safeUsername)
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(encodedPassword)
                 .codeforcesHandle(safeHandle)
                 .role(Role.USER)
                 .build();
+        logger.info("[DIAG] Step 5: User entity built");
         
+        logger.info("[DIAG] Step 6: calling userRepository.save()");
         userRepository.save(user);
+        logger.info("[DIAG] Step 6: userRepository.save() completed successfully");
 
+        logger.info("[DIAG] Step 7: generating JWT tokens");
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
+        logger.info("[DIAG] Step 7: JWT tokens generated successfully");
 
         return AuthResponse.builder()
                 .accessToken(jwtToken)
