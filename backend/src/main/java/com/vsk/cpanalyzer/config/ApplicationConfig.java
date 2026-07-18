@@ -27,7 +27,17 @@ public class ApplicationConfig {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService());
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider(userDetailsService()) {
+            @Override
+            public org.springframework.security.core.Authentication authenticate(org.springframework.security.core.Authentication authentication) throws org.springframework.security.core.AuthenticationException {
+                try {
+                    return super.authenticate(authentication);
+                } catch (Throwable t) {
+                    org.slf4j.LoggerFactory.getLogger(ApplicationConfig.class).error("[DIAG-GLOBAL] AuthenticationProvider exception", t);
+                    throw t;
+                }
+            }
+        };
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }

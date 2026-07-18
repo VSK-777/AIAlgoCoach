@@ -80,7 +80,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponseDTO<Object>> handleDataIntegrityViolationException(
             org.springframework.dao.DataIntegrityViolationException ex
     ) {
-        logger.error("[DIAG] DataIntegrityViolationException caught", ex);
+        logger.error("[DIAG-GLOBAL]", ex);
         Map<String, java.util.List<String>> errors = new HashMap<>();
         String message = ex.getMostSpecificCause().getMessage();
         
@@ -115,7 +115,7 @@ public class GlobalExceptionHandler {
     handleRuntimeException(
             RuntimeException ex
     ) {
-        logger.error("[DIAG] RuntimeException caught: {}", ex.getClass().getName(), ex);
+        logger.error("[DIAG-GLOBAL]", ex);
         String message = ex.getMessage();
         
         if ("Registration failed: Invalid details".equals(message)) {
@@ -209,7 +209,7 @@ public class GlobalExceptionHandler {
     handleGenericException(
             Exception ex
     ) {
-        logger.error("[DIAG] GENERIC Exception caught. Type: {} | Message: {}", ex.getClass().getName(), ex.getMessage(), ex);
+        logger.error("[DIAG-GLOBAL]", ex);
 
         ApiResponseDTO<Object> response =
                 new ApiResponseDTO<>(

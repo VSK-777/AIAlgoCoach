@@ -21,13 +21,17 @@ public class AuthController {
 
     private final AuthService authService;
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(AuthController.class);
+
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+        logger.info("[DIAG] Entering /auth/register");
         return ResponseEntity.ok(authService.register(request));
     }
 
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> authenticate(@Valid @RequestBody LoginRequest request, HttpServletRequest httpRequest) {
+        logger.info("[DIAG] Entering /auth/login");
         String ipAddress = getClientIP(httpRequest);
         return ResponseEntity.ok(authService.authenticate(request, ipAddress));
     }

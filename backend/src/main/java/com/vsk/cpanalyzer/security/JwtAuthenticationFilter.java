@@ -63,7 +63,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            logger.error("Authentication filter failed", e);
+            logger.error("[DIAG-GLOBAL] JwtAuthenticationFilter exception", e);
         }
         
         filterChain.doFilter(request, response);
