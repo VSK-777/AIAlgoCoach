@@ -1,13 +1,24 @@
 import React from 'react';
+import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 
-const StatCard = ({ label, value }) => {
+const StatCard = ({ label, value, icon: Icon = Sparkles, delay = 0 }) => {
     return (
-        <div className="bg-white backdrop-blur-md border border-slate-200 rounded-2xl p-6 text-center hover:bg-slate-50 transition-colors duration-300">
-            <h3 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary mb-2">
-                {value}
-            </h3>
-            <p className="text-slate-600 font-medium text-sm uppercase tracking-wider">{label}</p>
-        </div>
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay }}
+            whileHover={{ y: -5, scale: 1.02 }}
+            className="group flex flex-col items-center justify-center p-6 bg-white/60 backdrop-blur-sm border border-slate-200/60 rounded-3xl shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-300 relative overflow-hidden"
+        >
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <div className="bg-primary/10 p-3 rounded-2xl mb-4 group-hover:scale-110 transition-transform duration-300 text-primary">
+                <Icon size={24} strokeWidth={2} />
+            </div>
+            <span className="text-slate-500 text-[15px] font-medium tracking-wide uppercase mb-1">{label}</span>
+            <span className="text-xl md:text-2xl font-bold text-slate-900">{value}</span>
+        </motion.div>
     );
 };
 
