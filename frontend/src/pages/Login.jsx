@@ -76,12 +76,17 @@ const Login = () => {
             const message = err.response?.data?.message;
             const errors = err.response?.data?.data;
 
-            if (status === 400 && errors && Object.keys(errors).length > 0) {
+            // Safely check if errors is a valid object before calling Object.keys
+            const hasFieldErrors = typeof errors === 'object' && errors !== null && Object.keys(errors).length > 0;
+
+            if (status === 400 && hasFieldErrors) {
                 setFieldErrors(errors);
                 setError('');
+            } else if (status === 401) {
+                setError('Invalid username or password.');
             } else {
                 setFieldErrors({});
-                setError(message || 'Invalid username or password.');
+                setError(message || err.message || 'Something went wrong. Please try again later.');
             }
         } finally {
             setIsLoading(false);

@@ -113,27 +113,48 @@ const Register = () => {
                 password,
                 codeforcesHandle
             });
+
+
+
+            
             localStorage.setItem('accessToken', res.data.accessToken);
+            console.log("Stored access token");
+            
             localStorage.setItem('refreshToken', res.data.refreshToken);
+            console.log("Stored refresh token");
+            
             localStorage.setItem('user', JSON.stringify({
                 username: res.data.username,
                 codeforcesHandle: res.data.codeforcesHandle
             }));
+            console.log("Stored user");
+            
+            console.log("Calling navigate");
             navigate('/dashboard');
+            console.log("Navigate returned");
+            
+            console.log("Leaving try block");
         } catch (err) {
+
             const status = err.response?.status;
             const message = err.response?.data?.message;
             const errors = err.response?.data?.data;
 
-            if (status === 400 && errors && Object.keys(errors).length > 0) {
+            // Safely check if errors is a valid object before calling Object.keys
+            const hasFieldErrors = typeof errors === 'object' && errors !== null && Object.keys(errors).length > 0;
+
+            if (status === 400 && hasFieldErrors) {
                 setFieldErrors(errors);
                 setError(''); // Hide generic error if we have field errors
             } else {
                 setFieldErrors({});
-                setError(message || 'Something went wrong. Please try again later.');
+                // Fallback to the generic error message or the exact JS error if it wasn't an API failure
+                setError(message || err.message || 'Something went wrong. Please try again later.');
             }
         } finally {
+
             setIsLoading(false);
+
         }
     };
 

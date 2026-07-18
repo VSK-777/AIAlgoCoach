@@ -28,6 +28,8 @@ const Dashboard = () => {
 
     const targetHandle = handle || JSON.parse(localStorage.getItem('user'))?.codeforcesHandle;
 
+
+
     useEffect(() => {
         const fetchAnalytics = async () => {
             if (!targetHandle) {
@@ -39,9 +41,12 @@ const Dashboard = () => {
             setLoading(true);
             setError('');
             try {
+
                 const res = await api.get(`/analytics/${targetHandle}`);
+
                 setAnalytics(res.data);
             } catch (err) {
+
                 setError('Failed to fetch analytics. Please check the handle and try again.');
             } finally {
                 setLoading(false);
