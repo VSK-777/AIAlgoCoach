@@ -11,7 +11,7 @@ import SocialCard from '../components/about/SocialCard';
 import { 
     Server, AppWindow, Code2, BrainCircuit, Box, 
     ShieldCheck, Database, Layers, Cloud, Activity, 
-    Lock, LineChart, GitBranch, Briefcase, Mail, Globe, 
+    Lock, LineChart, Github, Linkedin, Mail, Globe, 
     ArrowDown, Code, Zap, Heart, CheckCircle2
 } from 'lucide-react';
 
@@ -82,10 +82,10 @@ const AboutDeveloper = () => {
                         {/* Premium Social Icon Buttons */}
                         <div className="flex justify-center gap-4 mt-8">
                             <a href="https://github.com/VSK-777" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border border-slate-200 rounded-full text-slate-600 hover:text-primary hover:border-primary/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                                <GitBranch size={22} />
+                                <Github size={22} />
                             </a>
                             <a href="https://www.linkedin.com/in/vajjha-sai-krishna" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border border-slate-200 rounded-full text-slate-600 hover:text-primary hover:border-primary/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                                <Briefcase size={22} />
+                                <Linkedin size={22} />
                             </a>
                             <a href="mailto:vajjhasaikrishna@gmail.com" className="p-3 bg-white border border-slate-200 rounded-full text-slate-600 hover:text-primary hover:border-primary/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
                                 <Mail size={22} />
@@ -392,8 +392,8 @@ const AboutDeveloper = () => {
                 <section>
                     <SectionHeading title="Connect With Me" subtitle="Let's build something amazing together." />
                     <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
-                        <SocialCard icon={GitBranch} title="GitHub" subtitle="@VSK-777" href="https://github.com/VSK-777" delay={0.1} />
-                        <SocialCard icon={Briefcase} title="LinkedIn" subtitle="Vajjha Sai Krishna" href="https://www.linkedin.com/in/vajjha-sai-krishna" delay={0.2} />
+                        <SocialCard icon={Github} title="GitHub" subtitle="@VSK-777" href="https://github.com/VSK-777" delay={0.1} />
+                        <SocialCard icon={Linkedin} title="LinkedIn" subtitle="Vajjha Sai Krishna" href="https://www.linkedin.com/in/vajjha-sai-krishna" delay={0.2} />
                         <SocialCard icon={Mail} title="Email" subtitle="vajjhasaikrishna@gmail.com" href="mailto:vajjhasaikrishna@gmail.com" delay={0.3} />
                         <SocialCard icon={Globe} title="Portfolio" subtitle="Coming Soon" disabled={true} delay={0.4} />
                     </div>
