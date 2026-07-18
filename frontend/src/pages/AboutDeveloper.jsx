@@ -6,14 +6,15 @@ import StatCard from '../components/about/StatCard';
 import TechCard from '../components/about/TechCard';
 import FeatureCard from '../components/about/FeatureCard';
 import ChallengeCard from '../components/about/ChallengeCard';
-import TimelineItem from '../components/about/TimelineItem';
 import SocialCard from '../components/about/SocialCard';
 import { 
     Server, AppWindow, Code2, BrainCircuit, Box, 
     ShieldCheck, Database, Layers, Cloud, Activity, 
-    Lock, LineChart, Github, Linkedin, Mail, Globe, 
+    Lock, LineChart, Globe, 
     ArrowDown, Code, Zap, Heart, CheckCircle2
 } from 'lucide-react';
+import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
 
 const TYPEWRITER_TEXTS = [
     "Computer Science Engineer",
@@ -67,12 +68,17 @@ const AboutDeveloper = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.7, delay: 0.2 }}
-                        className="mt-10"
+                        className="mt-10 md:mt-12 flex flex-col items-center"
                     >
-                        <h1 className="text-[40px] md:text-[64px] font-[800] tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-primary via-slate-800 to-secondary leading-tight pb-2">
+                        <motion.h1 
+                            initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                            className="text-[42px] sm:text-[56px] md:text-[80px] font-[900] tracking-tighter text-transparent bg-clip-text bg-gradient-to-br from-slate-900 via-slate-800 to-primary/80 leading-[1.1] pb-2"
+                        >
                             VAJJHA SAI KRISHNA
-                        </h1>
-                        <div className="mt-4 h-8 md:h-10 flex items-center justify-center">
+                        </motion.h1>
+                        <div className="mt-4 md:mt-6 h-8 md:h-10 flex items-center justify-center">
                             <p className="text-xl md:text-[22px] font-semibold text-slate-500">
                                 {typedText}
                                 <span className="animate-pulse text-primary ml-1">|</span>
@@ -82,13 +88,13 @@ const AboutDeveloper = () => {
                         {/* Premium Social Icon Buttons */}
                         <div className="flex justify-center gap-4 mt-8">
                             <a href="https://github.com/VSK-777" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border border-slate-200 rounded-full text-slate-600 hover:text-primary hover:border-primary/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                                <Github size={22} />
+                                <FaGithub size={22} />
                             </a>
                             <a href="https://www.linkedin.com/in/vajjha-sai-krishna" target="_blank" rel="noopener noreferrer" className="p-3 bg-white border border-slate-200 rounded-full text-slate-600 hover:text-primary hover:border-primary/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                                <Linkedin size={22} />
+                                <FaLinkedin size={22} />
                             </a>
                             <a href="mailto:vajjhasaikrishna@gmail.com" className="p-3 bg-white border border-slate-200 rounded-full text-slate-600 hover:text-primary hover:border-primary/30 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
-                                <Mail size={22} />
+                                <MdEmail size={22} />
                             </a>
                         </div>
                     </motion.div>
@@ -136,7 +142,7 @@ const AboutDeveloper = () => {
                         >
                             <div className="flex items-center gap-4">
                                 <div className="p-2.5 bg-primary/10 rounded-xl text-primary"><Server size={20} /></div>
-                                <div><h4 className="font-bold text-slate-900 text-[16px]">Backend Focus</h4><p className="text-[14px] text-slate-500">Java, Spring Boot, Microservices</p></div>
+                                <div><h4 className="font-bold text-slate-900 text-[16px]">Backend Focus</h4><p className="text-[14px] text-slate-500">Java, Spring Boot, REST APIs</p></div>
                             </div>
                             <div className="flex items-center gap-4">
                                 <div className="p-2.5 bg-secondary/10 rounded-xl text-secondary"><BrainCircuit size={20} /></div>
@@ -235,7 +241,7 @@ const AboutDeveloper = () => {
                             </h3>
                             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
                                 <TechCard icon={Box} title="Docker" description="Containerization for isolated deployments and builds." delay={0.1} />
-                                <TechCard icon={GitBranch} title="Git & GitHub" description="Version control, branching, and source code management." delay={0.2} />
+                                <TechCard icon={FaGithub} title="Git & GitHub" description="Version control, branching, and source code management." delay={0.2} />
                                 <TechCard icon={Cloud} title="Render & Vercel" description="Production CI/CD pipelines and global edge hosting." delay={0.3} />
                                 <TechCard icon={BrainCircuit} title="Groq AI" description="High-speed AI inference (Llama 3) for algorithmic mentorship." delay={0.4} />
                             </div>
@@ -305,18 +311,6 @@ const AboutDeveloper = () => {
                     </motion.div>
                 </section>
 
-                {/* Section 7: Development Journey (Animated Vertical Timeline) */}
-                <section>
-                    <SectionHeading title="Development Journey" subtitle="The evolution of my skills leading up to this project." />
-                    <div className="max-w-3xl mx-auto py-8">
-                        <TimelineItem date="Phase 1" title="Programming Fundamentals" delay={0.1} />
-                        <TimelineItem date="Phase 2" title="Java" delay={0.2} />
-                        <TimelineItem date="Phase 3" title="Spring Boot" delay={0.3} />
-                        <TimelineItem date="Phase 4" title="React" delay={0.4} />
-                        <TimelineItem date="Phase 5" title="Artificial Intelligence" delay={0.5} />
-                        <TimelineItem date="Present" title="AIAlgoCoach" isLast={true} delay={0.6} />
-                    </div>
-                </section>
 
                 {/* Section 8: Challenges Solved */}
                 <section>
@@ -363,38 +357,14 @@ const AboutDeveloper = () => {
                     </motion.div>
                 </section>
 
-                {/* Section 11: Future Roadmap */}
-                <section>
-                    <SectionHeading title="Future Roadmap" />
-                    <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
-                        <motion.div initial={{opacity:0, y:10}} whileInView={{opacity:1,y:0}} viewport={{once:true}} className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm flex items-center gap-3">
-                            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div><span className="text-[16px] text-slate-700 font-semibold">AI Code Review</span>
-                        </motion.div>
-                        <motion.div initial={{opacity:0, y:10}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:0.1}} className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm flex items-center gap-3">
-                            <div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div><span className="text-[16px] text-slate-700 font-semibold">Mobile App</span>
-                        </motion.div>
-                        <motion.div initial={{opacity:0, y:10}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:0.2}} className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm flex items-center gap-3">
-                            <div className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse"></div><span className="text-[16px] text-slate-700 font-semibold">Contest Prediction</span>
-                        </motion.div>
-                        <motion.div initial={{opacity:0, y:10}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:0.3}} className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm flex items-center gap-3">
-                            <div className="w-2.5 h-2.5 rounded-full bg-slate-300"></div><span className="text-[16px] text-slate-700 font-semibold">Advanced Analytics</span>
-                        </motion.div>
-                        <motion.div initial={{opacity:0, y:10}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:0.4}} className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm flex items-center gap-3">
-                            <div className="w-2.5 h-2.5 rounded-full bg-slate-300"></div><span className="text-[16px] text-slate-700 font-semibold">Personalized Learning</span>
-                        </motion.div>
-                        <motion.div initial={{opacity:0, y:10}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:0.5}} className="bg-white border border-slate-200/80 rounded-2xl p-5 shadow-sm flex items-center gap-3">
-                            <div className="w-2.5 h-2.5 rounded-full bg-slate-300"></div><span className="text-[16px] text-slate-700 font-semibold">More AI Agents</span>
-                        </motion.div>
-                    </div>
-                </section>
 
                 {/* Section 12: Connect */}
                 <section>
                     <SectionHeading title="Connect With Me" subtitle="Let's build something amazing together." />
                     <div className="grid md:grid-cols-2 gap-5 max-w-3xl mx-auto">
-                        <SocialCard icon={Github} title="GitHub" subtitle="@VSK-777" href="https://github.com/VSK-777" delay={0.1} />
-                        <SocialCard icon={Linkedin} title="LinkedIn" subtitle="Vajjha Sai Krishna" href="https://www.linkedin.com/in/vajjha-sai-krishna" delay={0.2} />
-                        <SocialCard icon={Mail} title="Email" subtitle="vajjhasaikrishna@gmail.com" href="mailto:vajjhasaikrishna@gmail.com" delay={0.3} />
+                        <SocialCard icon={FaGithub} title="GitHub" subtitle="@VSK-777" href="https://github.com/VSK-777" delay={0.1} />
+                        <SocialCard icon={FaLinkedin} title="LinkedIn" subtitle="Vajjha Sai Krishna" href="https://www.linkedin.com/in/vajjha-sai-krishna" delay={0.2} />
+                        <SocialCard icon={MdEmail} title="Email" subtitle="vajjhasaikrishna@gmail.com" href="mailto:vajjhasaikrishna@gmail.com" delay={0.3} />
                         <SocialCard icon={Globe} title="Portfolio" subtitle="Coming Soon" disabled={true} delay={0.4} />
                     </div>
                 </section>
