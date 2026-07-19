@@ -36,7 +36,7 @@ To dive into the specific codebases, please navigate to the respective documenta
 
 | Category | Technology |
 | --- | --- |
-| **Frontend** | React 19, Vite 8, Tailwind CSS, Recharts, React Router DOM 7 |
+| **Frontend** | React 19, Vite 8, Tailwind CSS, Recharts, React Router DOM 7, Vercel Analytics |
 | **Backend** | Java 25, Spring Boot 4.1.x, Spring Security, Spring AI, Spring Data JPA |
 | **Database** | Neon PostgreSQL, Flyway |
 | **AI Integration** | Groq API (Llama 3.1 8b Instant) |
@@ -147,5 +147,5 @@ If you are a developer looking to build, test, or deploy this application, pleas
 
 Passionate about developing futuristic AI assistants, scalable software systems, and modern full-stack applications using professional software engineering principles. Focused on building scalable AI-powered full-stack applications and futuristic intelligent systems.
 
-- **Current Focus:** Full Stack Java Development, AI Engineering, Spring Boot Microservices, React Development, and Intelligent AI Systems.
+- **Current Focus:** Full Stack Java Development, AI Engineering, Spring Boot REST APIs, React Development, and Intelligent AI Systems.
 - **Skills:** Java, Spring Boot, React, REST APIs, PostgreSQL, JWT Authentication, Docker, AI Integration, Groq API, Vercel, Render, AWS, and Data Structures & Algorithms. 
