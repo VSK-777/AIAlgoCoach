@@ -36,7 +36,7 @@ To dive into the specific codebases, please navigate to the respective documenta
 
 | Category | Technology |
 | --- | --- |
-| **Frontend** | React 19, Vite 8, Tailwind CSS, Recharts, React Router DOM 7, Vercel Analytics |
+| **Frontend** | React 19, Vite 8, Tailwind CSS, Recharts, React Router DOM 7 |
 | **Backend** | Java 25, Spring Boot 4.1.x, Spring Security, Spring AI, Spring Data JPA |
 | **Database** | Neon PostgreSQL, Flyway |
 | **AI Integration** | Groq API (Llama 3.1 8b Instant) |
